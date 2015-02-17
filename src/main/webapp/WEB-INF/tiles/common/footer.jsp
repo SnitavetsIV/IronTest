@@ -7,6 +7,6 @@
     <title>Default footer</title>
 </head>
 <body>
-
+footer
 </body>
 </html>

@@ -5,17 +5,18 @@
 <tiles-definitions>
 
     <definition name="DefaultTemplate"
-                template="/WEB-INF/view/template/mainTemplate.jsp">
+                template="/WEB-INF/layouts/mainLayout.jsp">
         <put-attribute name="title" value="Home"/>
-        <put-attribute name="header" value="/WEB-INF/view/template/header.jsp"/>
-        <put-attribute name="menu" value="/WEB-INF/view/template/menu.jsp"/>
+        <put-attribute name="header" value="/WEB-INF/tiles/common/header.jsp"/>
+        <put-attribute name="menu" value="/WEB-INF/tiles/menu/mainMenu.jsp"/>
         <put-attribute name="body" value=""/>
-        <put-attribute name="footer" value="/WEB-INF/view/template/footer.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/tiles/common/footer.jsp"/>
     </definition>
 
-    <definition name="index" extends="DefaultTemplate">
+    <definition name="startPage" extends="DefaultTemplate">
+        <put-attribute name="title" value="Iron Test"/>
         <put-attribute name="body"
-                       value="/WEB-INF/views/index.jsp"/>
+                       value="/WEB-INF/tiles/body/mainBody.jsp"/>
     </definition>
 
 </tiles-definitions>
