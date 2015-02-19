@@ -4,9 +4,8 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Default footer</title>
 </head>
 <body>
-footer
+<div class="text-center">footer</div>
 </body>
 </html>

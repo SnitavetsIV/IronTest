@@ -4,9 +4,10 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Default header</title>
 </head>
 <body>
-header
+
+<div class="col-sm-8 text-center"> name of site</div>
+<div class="col-sm-4 text-center"> login password</div>
 </body>
 </html>

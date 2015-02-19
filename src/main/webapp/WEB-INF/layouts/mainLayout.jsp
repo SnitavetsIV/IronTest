@@ -5,22 +5,25 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css">
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/css/bootstrap-theme.min.css">
     <title><tiles:insertAttribute name="title"/></title>
 </head>
 <body>
-<table>
-    <tbody>
-    <tr>
-        <td colspan="2"><tiles:insertAttribute name="header"/></td>
-    </tr>
-    <tr>
-        <td><tiles:insertAttribute name="menu"/></td>
-        <td><tiles:insertAttribute name="body"/></td>
-    </tr>
-    <tr>
-        <td colspan="2"><tiles:insertAttribute name="footer"/></td>
-    </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-sm-12">
+        <tiles:insertAttribute name="header"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4"><tiles:insertAttribute name="menu"/></div>
+    <div class="col-sm-8"><tiles:insertAttribute name="body"/></div>
+</div>
+<div class="row">
+    <div class="col-sm-12"><tiles:insertAttribute name="footer"/></div>
+</div>
+<script src="/resources/js/jquery-1.11.0.min.js"></script>
+<script src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
