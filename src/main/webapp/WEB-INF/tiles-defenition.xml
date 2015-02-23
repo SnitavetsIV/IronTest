@@ -6,7 +6,7 @@
 
     <definition name="DefaultTemplate"
                 template="/WEB-INF/layouts/mainLayout.jsp">
-        <put-attribute name="title" value="Home"/>
+        <put-attribute name="titleBundle" value="messages.jsp.default.title"/>
         <put-attribute name="header" value="/WEB-INF/tiles/common/header.jsp"/>
         <put-attribute name="menu" value="/WEB-INF/tiles/menu/mainMenu.jsp"/>
         <put-attribute name="body" value=""/>
@@ -14,7 +14,6 @@
     </definition>
 
     <definition name="startPage" extends="DefaultTemplate">
-        <put-attribute name="title" value="Iron Test"/>
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/mainBody.jsp"/>
     </definition>
