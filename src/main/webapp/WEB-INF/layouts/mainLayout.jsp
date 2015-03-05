@@ -9,22 +9,25 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="/resources/css/style.css">
     <link rel="stylesheet" href="/resources/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/sticky-footer.css">
     <title>
         <c:set var="titleValue"><tiles:insertAttribute name='titleBundle'/></c:set>
         <spring:message code="${titleValue}"/></title>
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-static-top">
-    <tiles:insertAttribute name="header"/>
+<tiles:insertAttribute name="header"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <tiles:insertAttribute name="menu"/>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <tiles:insertAttribute name="body"/>
+        </div>
+    </div>
 </div>
-<div class="row">
-    <div class="col-sm-4"><tiles:insertAttribute name="menu"/></div>
-    <div class="col-sm-8"><tiles:insertAttribute name="body"/></div>
-</div>
-<div class="row">
-    <div class="col-sm-12"><tiles:insertAttribute name="footer"/></div>
-</div>
-<script src="/resources/js/jquery.js"></script>
-<script src="/resources/js/bootstrap.js"></script>
+<tiles:insertAttribute name="footer"/>
+<script src="/resources/js/jquery-1.11.2.min.js"></script>
+<script src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
