@@ -7,7 +7,9 @@ package com.snitavets.irontest.entity;
  */
 public enum UserType {
 
-    ALL,
+    GUEST,
+
+    TUTOR,
 
     USER,
 

@@ -14,9 +14,10 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
+    font: caption;
     /* Set the fixed height of the footer here */
     height: 60px;
-    background-color: #f5f5f5;
+    background-color: rgba(245, 245, 245, 0.71);
 }
 
 /* Custom page CSS

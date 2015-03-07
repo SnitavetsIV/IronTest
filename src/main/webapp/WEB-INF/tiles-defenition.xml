@@ -6,16 +6,31 @@
 
     <definition name="DefaultTemplate"
                 template="/WEB-INF/layouts/mainLayout.jsp">
-        <put-attribute name="titleBundle" value="messages.jsp.default.title"/>
+        <put-attribute name="titleBundle" value="default.title"/>
         <put-attribute name="header" value="/WEB-INF/tiles/common/header.jsp"/>
         <put-attribute name="menu" value="/WEB-INF/tiles/menu/mainMenu.jsp"/>
         <put-attribute name="body" value=""/>
         <put-attribute name="footer" value="/WEB-INF/tiles/common/footer.jsp"/>
     </definition>
 
-    <definition name="startPage" extends="DefaultTemplate">
+    <definition name="guestMainPage" extends="DefaultTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/mainBody.jsp"/>
+    </definition>
+
+    <definition name="userMainPage" extends="DefaultTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/userBody.jsp"/>
+    </definition>
+
+    <definition name="loginPage" extends="DefaultTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/authorization/loginBody.jsp"/>
+    </definition>
+
+    <definition name="registrationPage" extends="DefaultTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/authorization/registrationBody.jsp"/>
     </definition>
 
 </tiles-definitions>
