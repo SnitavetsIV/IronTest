@@ -1,6 +1,8 @@
 package com.snitavets.irontest.controller;
 
+import com.snitavets.irontest.dao.IUserDao;
 import com.snitavets.irontest.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,18 @@ import static com.snitavets.irontest.constant.Constant.*;
  */
 @Controller
 public class MainController {
+
+    @Autowired
+    private IUserDao dao;
+
+    public void setDao(IUserDao _dao) {
+        dao = _dao;
+    }
+
+    @RequestMapping("/")
+    public ModelAndView defaultHome(HttpServletRequest request) {
+        return home(request);
+    }
 
     @RequestMapping("/irontest/")
     public ModelAndView home(HttpServletRequest request) {
@@ -44,7 +58,7 @@ public class MainController {
         return result;
     }
 
-    @RequestMapping("/irontest/singin")
+    @RequestMapping("/irontest/login")
     public ModelAndView login() {
         return new ModelAndView(PAGE_LOGIN);
     }
