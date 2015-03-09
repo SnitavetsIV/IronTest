@@ -142,7 +142,7 @@
     display: inline-block;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1001px) {
     #wrapper {
         padding-left: 70px;
         transition: all .4s ease 0s;
@@ -177,6 +177,6 @@
     font-size: large;
 }
 
-#sidebar_menu {
+#sidebar_menu a {
     color: #D2D2D2;
 }
