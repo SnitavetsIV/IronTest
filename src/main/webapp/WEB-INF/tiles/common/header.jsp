@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -21,7 +22,7 @@
                 <li><a href="#about"><spring:message code='header.about'/></a></li>
                 <li><a href="#contact"><spring:message code='header.contact'/></a></li>
             </ul>
-            <form class="navbar-form navbar-right" action="/irontest/authorization" method="post">
+            <form class="navbar-form navbar-right" action="<c:url value='/j_spring_security_check' />" method="post">
                 <div class="form-group">
                     <input type="text" name="login" class="form-control" required="required"
                            placeholder="<spring:message code='authorization.login.login.name'/>"
@@ -34,6 +35,8 @@
                            pattern="<spring:message code='authorization.login.password.pattern'/>"
                            title="<spring:message code='authorization.login.password.title'/>">
                 </div>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <button type="submit" class="btn btn-success"><spring:message code='header.singin'/></button>
                 <a class="btn btn-success" href="/irontest/registration"><spring:message
                         code='header.registration'/></a>

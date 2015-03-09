@@ -1,6 +1,8 @@
 package com.snitavets.irontest.service;
 
 import com.snitavets.irontest.dao.IUserDao;
+import com.snitavets.irontest.exception.DaoException;
+import org.apache.log4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,13 +20,19 @@ import java.util.List;
  */
 public class UserService implements UserDetailsService {
 
+    private static final Logger LOG = Logger.getLogger(UserService.class);
+
     private IUserDao userDao;
 
     @Override
     public UserDetails loadUserByUsername(final String username)
             throws UsernameNotFoundException {
-
-        com.snitavets.irontest.entity.User user = userDao.findUserByLogin(username);
+        com.snitavets.irontest.entity.User user = null;
+        try {
+            user = userDao.findUserByLogin(username);
+        } catch (DaoException e) {
+            throw new UsernameNotFoundException("Can't load user from database", e);
+        }
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getType().name()));
 

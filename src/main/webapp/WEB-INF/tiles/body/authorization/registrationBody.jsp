@@ -5,7 +5,7 @@
 <div class="well lead">
     <div class="container-fluid">
         <div class="page-header"><h2><spring:message code='authorization.registration.header'/></h2></div>
-        <form class="form-horizontal">
+        <form class="form-horizontal" action="/irontest/save">
             <div class="form-group">
                 <label for="inputLogin" class="col-sm-3 control-label"><spring:message
                         code='authorization.registration.login.name'/></label>

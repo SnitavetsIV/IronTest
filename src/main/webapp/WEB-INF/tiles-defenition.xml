@@ -33,4 +33,9 @@
                        value="/WEB-INF/tiles/body/authorization/registrationBody.jsp"/>
     </definition>
 
+    <definition name="error403page" extends="DefaultTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/error403.jsp"/>
+    </definition>
+
 </tiles-definitions>

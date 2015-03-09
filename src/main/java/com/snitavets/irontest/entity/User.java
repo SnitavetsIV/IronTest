@@ -13,8 +13,12 @@ import java.io.Serializable;
 @SecondaryTables({
         @SecondaryTable(catalog = "IronTestDB",
                 name = "user_data",
-                pkJoinColumns = @PrimaryKeyJoinColumn(name = "ud_user_id", referencedColumnName = "u_id")),
-        @SecondaryTable(name = "role", pkJoinColumns = @PrimaryKeyJoinColumn(name = "r_id", referencedColumnName = "u_role_id"))
+                pkJoinColumns =
+                @PrimaryKeyJoinColumn(name = "ud_user_id",
+                        referencedColumnName = "u_id")),
+        @SecondaryTable(name = "role",
+                pkJoinColumns = @PrimaryKeyJoinColumn(name = "r_id",
+                        referencedColumnName = "u_role_id"))
 })
 public class User implements Serializable {
 

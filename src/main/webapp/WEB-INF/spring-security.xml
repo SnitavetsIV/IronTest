@@ -8,25 +8,25 @@
 
     <!-- enable use-expressions -->
     <http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/admin**" access="hasRole('ADMIN')"/>
-        <intercept-url pattern="/tutor**" access="hasRole('TUTOR')"/>
+        <intercept-url pattern="/irontest/admin**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/irontest/tutor**" access="hasRole('TUTOR')"/>
 
         <!-- access denied page -->
-        <access-denied-handler error-page="/403"/>
+        <access-denied-handler error-page="/irontest/403"/>
         <form-login
-                login-page="/login"
-                default-target-url="/welcome"
-                authentication-failure-url="/login?error"
+                login-page="/irontest/login"
+                default-target-url="/irontest/welcome"
+                authentication-failure-url="/irontest/login?error"
                 username-parameter="username"
                 password-parameter="password"/>
-        <logout logout-success-url="/login?logout"/>
+        <logout logout-success-url="/irontest/login?logout"/>
         <!-- enable csrf protection -->
         <csrf/>
     </http>
 
     <authentication-manager>
         <authentication-provider user-service-ref="myUserDetailsService">
-            <password-encoder hash="plaintext"/>
+            <password-encoder hash="md5"/>
         </authentication-provider>
     </authentication-manager>
 

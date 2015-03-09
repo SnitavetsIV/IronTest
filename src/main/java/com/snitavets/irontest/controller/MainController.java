@@ -2,15 +2,23 @@ package com.snitavets.irontest.controller;
 
 import com.snitavets.irontest.dao.IUserDao;
 import com.snitavets.irontest.entity.User;
+import com.snitavets.irontest.exception.DaoException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import static com.snitavets.irontest.constant.Constant.*;
 
@@ -20,6 +28,8 @@ import static com.snitavets.irontest.constant.Constant.*;
 @Controller
 public class MainController {
 
+    private static final Logger LOG = Logger.getLogger(MainController.class);
+
     @Autowired
     private IUserDao dao;
 
@@ -27,15 +37,10 @@ public class MainController {
         dao = _dao;
     }
 
-    @RequestMapping("/")
-    public ModelAndView defaultHome(HttpServletRequest request) {
-        return home(request);
-    }
-
-    @RequestMapping("/irontest/")
+    @RequestMapping(value = {"/irontest/", "/"})
     public ModelAndView home(HttpServletRequest request) {
         ModelAndView result = null;
-        HttpSession session = request.getSession();
+        /*HttpSession session = request.getSession();
         User user = (User) session.getAttribute(ATR_USER);
         if (user != null) {
             switch (user.getType()) {
@@ -52,21 +57,65 @@ public class MainController {
                     session.removeAttribute(ATR_USER);
                     result = new ModelAndView(PAGE_GUEST_MAIN);
             }
-        } else {
+        } else {*/
             result = new ModelAndView(PAGE_GUEST_MAIN);
-        }
+       /*}*/
         return result;
     }
 
-    @RequestMapping("/irontest/login")
-    public ModelAndView login() {
-        return new ModelAndView(PAGE_LOGIN);
+    @RequestMapping(value = "/irontest/admin**", method = RequestMethod.GET)
+    public ModelAndView adminPage() {
+
+        ModelAndView model = new ModelAndView();
+
+        model.setViewName(PAGE_ADMIN_MAIN);
+
+        return model;
     }
 
-    @RequestMapping("/irontest/authorization")
-    public ModelAndView authorization(@RequestParam String login, @RequestParam String password, Model model) {
+    @RequestMapping(value = "/irontest/welcome**", method = RequestMethod.GET)
+    public ModelAndView userPage() {
 
-        return new ModelAndView(PAGE_LOGIN);
+        ModelAndView model = new ModelAndView();
+
+        model.setViewName(PAGE_USER_MAIN);
+
+        return model;
+    }
+
+    @RequestMapping("/irontest/login")
+    public ModelAndView login(@RequestParam(value = "error", required = false) String error,
+                              @RequestParam(value = "logout", required = false) String logout,
+                              HttpServletRequest request) {
+
+        ModelAndView model = new ModelAndView();
+        if (error != null) {
+            model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+        }
+
+        if (logout != null) {
+            model.addObject("msg", "You've been logged out successfully.");
+        }
+        model.setViewName(PAGE_LOGIN);
+
+        return model;
+    }
+
+    // customize the error message
+    private String getErrorMessage(HttpServletRequest request, String key) {
+
+        Exception exception = (Exception) request.getSession().getAttribute(key);
+
+        String error = "";
+        if (exception instanceof BadCredentialsException) {
+            error = "Invalid username and password!";
+        } else if (exception instanceof LockedException) {
+            error = exception.getMessage();
+        } else {
+            error = "Invalid username and password!";
+        }
+
+        return error;
     }
 
     @RequestMapping("/irontest/registration")
@@ -75,8 +124,36 @@ public class MainController {
     }
 
     @RequestMapping("/irontest/save")
-    public ModelAndView saveNewUser() {
-        return new ModelAndView(PAGE_REGISTRATION);
+    public ModelAndView saveNewUser(@RequestParam String login,
+                                    @RequestParam String password,
+                                    @RequestParam String password2) throws DaoException {
+        ModelAndView modelAndView = new ModelAndView();
+        if (password.equals(password2)) {
+            User user = new User();
+            user.setLogin(login);
+            Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+            user.setPassword(encoder.encodePassword(password, null));
+            dao.saveUser(user);
+            modelAndView.setViewName(PAGE_LOGIN);
+        } else {
+            modelAndView.setViewName(PAGE_REGISTRATION);
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/irontest/403", method = RequestMethod.GET)
+    public ModelAndView accesssDenied() {
+        ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetail = (UserDetails) auth.getPrincipal();
+            LOG.info(userDetail);
+            model.addObject("username", userDetail.getUsername());
+        }
+
+        model.setViewName(PAGE_403);
+        return model;
+
     }
 
 }

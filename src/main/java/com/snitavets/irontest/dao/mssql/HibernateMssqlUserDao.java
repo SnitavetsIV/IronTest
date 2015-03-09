@@ -2,7 +2,10 @@ package com.snitavets.irontest.dao.mssql;
 
 import com.snitavets.irontest.dao.IUserDao;
 import com.snitavets.irontest.entity.User;
-import org.hibernate.SessionFactory;
+import com.snitavets.irontest.exception.DaoException;
+import org.hibernate.*;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Hibernate realisation to MS Sql Server of user dao
@@ -18,15 +21,29 @@ public class HibernateMssqlUserDao implements IUserDao {
     }
 
     /**
-     * Create user
+     * Save user
      *
-     * @param login    unique login of new user
-     * @param password hashed password of new user
+     * @param user entity of new user
      * @return true is user was successfully created
      */
     @Override
-    public boolean createUser(String login, String password) {
-        return false;
+    @Transactional
+    public boolean saveUser(User user) throws DaoException {
+        boolean result = false;
+        Transaction transaction = null;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(user);
+            result = true;
+            transaction.commit();
+        } catch (HibernateException he) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DaoException(he);
+        }
+        return result;
     }
 
     /**
@@ -36,8 +53,18 @@ public class HibernateMssqlUserDao implements IUserDao {
      * @return true if login exist
      */
     @Override
-    public boolean isLoginExist(String login) {
-        return false;
+    public boolean isLoginExist(String login) throws DaoException {
+        boolean result = false;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(User.class).add(Restrictions.eq("login", login));
+            if (criteria.list().size() > 0) {
+                result = true;
+            }
+        } catch (HibernateException he) {
+            throw new DaoException(he);
+        }
+        return result;
     }
 
     /**
@@ -45,10 +72,19 @@ public class HibernateMssqlUserDao implements IUserDao {
      *
      * @param login login of user
      * @return entity User, by login
+     *          null if user isn't exist
      * @see com.snitavets.irontest.entity.User
      */
     @Override
-    public User findUserByLogin(String login) {
-        return null;
+    public User findUserByLogin(String login) throws DaoException {
+        User user = null;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(User.class).add(Restrictions.eq("login", login));
+            user = (User) criteria.uniqueResult();
+        } catch (HibernateException he) {
+            throw new DaoException(he);
+        }
+        return user;
     }
 }

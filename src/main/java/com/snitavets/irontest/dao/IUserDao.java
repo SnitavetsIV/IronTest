@@ -1,6 +1,7 @@
 package com.snitavets.irontest.dao;
 
 import com.snitavets.irontest.entity.User;
+import com.snitavets.irontest.exception.DaoException;
 
 /**
  * Interface to access to entity if user in database
@@ -10,13 +11,12 @@ import com.snitavets.irontest.entity.User;
 public interface IUserDao {
 
     /**
-     * Create new user in database
+     * Save user
      *
-     * @param login    unique login of new user
-     * @param password hashed password of new user
+     * @param user entity of new user
      * @return true is user was successfully created
      */
-    boolean createUser(String login, String password);
+    boolean saveUser(User user) throws DaoException;
 
     /**
      * Checks login of user in database
@@ -24,7 +24,7 @@ public interface IUserDao {
      * @param login login, which you want to check for exist
      * @return true if login exist
      */
-    boolean isLoginExist(String login);
+    boolean isLoginExist(String login) throws DaoException;
 
     /**
      * Find user in database by login
@@ -33,6 +33,6 @@ public interface IUserDao {
      * @return entity User, by login
      * @see com.snitavets.irontest.entity.User
      */
-    User findUserByLogin(String login);
+    User findUserByLogin(String login) throws DaoException;
 
 }
