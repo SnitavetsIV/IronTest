@@ -55,13 +55,19 @@ public class HibernateMssqlUserDao implements IUserDao {
     @Override
     public boolean isLoginExist(String login) throws DaoException {
         boolean result = false;
+        Transaction transaction = null;
         try {
             Session session = sessionFactory.getCurrentSession();
+            transaction = session.beginTransaction();
             Criteria criteria = session.createCriteria(User.class).add(Restrictions.eq("login", login));
             if (criteria.list().size() > 0) {
                 result = true;
             }
+            transaction.commit();
         } catch (HibernateException he) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new DaoException(he);
         }
         return result;
@@ -78,11 +84,17 @@ public class HibernateMssqlUserDao implements IUserDao {
     @Override
     public User findUserByLogin(String login) throws DaoException {
         User user = null;
+        Transaction transaction = null;
         try {
             Session session = sessionFactory.getCurrentSession();
+            transaction = session.beginTransaction();
             Criteria criteria = session.createCriteria(User.class).add(Restrictions.eq("login", login));
             user = (User) criteria.uniqueResult();
+            transaction.commit();
         } catch (HibernateException he) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new DaoException(he);
         }
         return user;

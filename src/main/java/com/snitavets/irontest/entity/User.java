@@ -9,16 +9,12 @@ import java.io.Serializable;
  * @author Ilya_Snitavets
  */
 @Entity
-@Table(name = "user", catalog = "IronTestDB")
+@Table(name = "[user]")
 @SecondaryTables({
-        @SecondaryTable(catalog = "IronTestDB",
-                name = "user_data",
+        @SecondaryTable(name = "user_data",
                 pkJoinColumns =
                 @PrimaryKeyJoinColumn(name = "ud_user_id",
-                        referencedColumnName = "u_id")),
-        @SecondaryTable(name = "role",
-                pkJoinColumns = @PrimaryKeyJoinColumn(name = "r_id",
-                        referencedColumnName = "u_role_id"))
+                        referencedColumnName = "u_id"))
 })
 public class User implements Serializable {
 
@@ -42,9 +38,9 @@ public class User implements Serializable {
     @Column(name = "u_enabled", nullable = false)
     private boolean enabled = true;
 
-    @Column(table = "role", name = "r_name")
-    @Enumerated(EnumType.STRING)
-    private UserType type;
+    @Column(name = "u_role_id")
+    @Enumerated(EnumType.ORDINAL)
+    private UserType type = UserType.USER;
 
     public Integer getId() {
         return id;

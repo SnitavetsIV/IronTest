@@ -3,6 +3,10 @@
     margin-top: -7px;
 }
 
+.error {
+    color: red;
+}
+
 .navbar {
     margin-bottom: 0;
 }

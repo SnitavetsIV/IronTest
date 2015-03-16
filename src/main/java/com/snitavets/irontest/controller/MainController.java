@@ -108,12 +108,13 @@ public class MainController {
 
         String error = "";
         if (exception instanceof BadCredentialsException) {
-            error = "Invalid username and password!";
+            error = "Invalid username or password!";
         } else if (exception instanceof LockedException) {
             error = exception.getMessage();
         } else {
-            error = "Invalid username and password!";
+            error = "Invalid username or password!";
         }
+        LOG.error(exception);
 
         return error;
     }
@@ -123,11 +124,14 @@ public class MainController {
         return new ModelAndView(PAGE_REGISTRATION);
     }
 
-    @RequestMapping("/irontest/save")
+    @RequestMapping(value = "/irontest/save", method = RequestMethod.GET)
     public ModelAndView saveNewUser(@RequestParam String login,
                                     @RequestParam String password,
                                     @RequestParam String password2) throws DaoException {
         ModelAndView modelAndView = new ModelAndView();
+        if (dao.isLoginExist(login)) {
+
+        }
         if (password.equals(password2)) {
             User user = new User();
             user.setLogin(login);

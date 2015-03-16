@@ -9,10 +9,11 @@ public enum UserType {
 
     GUEST,
 
-    TUTOR,
-
     USER,
 
-    ADMIN
+    ADMIN,
+
+    TUTOR,
+
 
 }

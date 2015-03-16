@@ -21,6 +21,8 @@
 
     <mvc:annotation-driven/>
 
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
     <mvc:resources mapping="/resources/**" location="/WEB-INF/ "/>
 
     <bean id="messageSource"

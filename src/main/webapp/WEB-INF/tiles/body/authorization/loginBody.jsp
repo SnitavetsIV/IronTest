@@ -6,15 +6,17 @@
 <div class="well lead">
     <div class="container-fluid">
         <div class="page-header"><h2><spring:message code='authorization.login.header'/></h2></div>
-
-        <c:if test="${not empty error}">
-            <div class="error">${error}</div>
-        </c:if>
-        <c:if test="${not empty msg}">
-            <div class="msg">${msg}</div>
-        </c:if>
-
         <form class="form-horizontal" action="<c:url value='/j_spring_security_check' />" method="post">
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-8">
+                    <c:if test="${not empty error}">
+                        <div class="error">${error}</div>
+                    </c:if>
+                    <c:if test="${not empty msg}">
+                        <div class="msg">${msg}</div>
+                    </c:if>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="inputLogin" class="col-sm-3 control-label"><spring:message
                         code='authorization.login.login.name'/></label>
@@ -39,6 +41,7 @@
             </div>
             <input type="hidden" name="${_csrf.parameterName}"
                    value="${_csrf.token}"/>
+
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <button type="submit" class="btn btn-success"><spring:message
