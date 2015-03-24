@@ -5,7 +5,7 @@
 <div class="well lead">
     <div class="container-fluid">
         <div class="page-header"><h2><spring:message code='authorization.registration.header'/></h2></div>
-        <form class="form-horizontal" action="/irontest/save" method="get">
+        <form class="form-horizontal" action="/irontest/save" method="post">
             <input type="hidden" name="${_csrf.parameterName}"
                    value="${_csrf.token}"/>
 

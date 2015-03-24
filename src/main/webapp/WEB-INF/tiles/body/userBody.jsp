@@ -6,8 +6,8 @@
 <div class="well lead">
     <sec:authorize access="hasRole('USER')">
         <!-- For login user -->
-        <c:url value="/j_spring_security_logout" var="logoutUrl"/>
-        <form action="${logoutUrl}" method="post" id="logoutForm">
+
+        <form action="<c:url value="/j_spring_security_logout"/>" method="get" id="logoutForm">
             <input type="hidden" name="${_csrf.parameterName}"
                    value="${_csrf.token}"/>
         </form>

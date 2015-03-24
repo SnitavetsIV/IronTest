@@ -24,7 +24,8 @@
                 <li><a href="#contact"><spring:message code='header.contact'/></a></li>
             </ul>
             <sec:authorize access="isAnonymous()">
-                <form class="navbar-form navbar-right" action="<c:url value='/j_spring_security_check' />" method="get">
+                <form class="navbar-form navbar-right" action="<c:url value='/j_spring_security_check' />"
+                      method="post">
                     <div class="form-group">
                         <input type="text" name="login" class="form-control" required="required"
                                placeholder="<spring:message code='authorization.login.login.name'/>"
@@ -46,7 +47,7 @@
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <c:url value="/j_spring_security_logout" var="logoutUrl"/>
-                <form action="${logoutUrl}" method="post" id="logoutForm">
+                <form action="${logoutUrl}" method="get" id="logoutForm">
                     <input type="hidden" name="${_csrf.parameterName}"
                            value="${_csrf.token}"/>
                 </form>

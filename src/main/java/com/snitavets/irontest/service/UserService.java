@@ -33,6 +33,9 @@ public class UserService implements UserDetailsService {
         } catch (DaoException e) {
             throw new UsernameNotFoundException("Can't load user from database", e);
         }
+        if (user == null) {
+            throw new UsernameNotFoundException("Username not found");
+        }
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getType().name()));
 

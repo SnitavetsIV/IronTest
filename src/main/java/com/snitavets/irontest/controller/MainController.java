@@ -58,7 +58,7 @@ public class MainController {
                     result = new ModelAndView(PAGE_GUEST_MAIN);
             }
         } else {*/
-            result = new ModelAndView(PAGE_GUEST_MAIN);
+        result = new ModelAndView(PAGE_GUEST_MAIN);
        /*}*/
         return result;
     }
@@ -112,7 +112,7 @@ public class MainController {
         } else if (exception instanceof LockedException) {
             error = exception.getMessage();
         } else {
-            error = "Invalid username or password!";
+            error = "Some problem with authentication. Please try again later!";
         }
         LOG.error(exception);
 
@@ -124,28 +124,29 @@ public class MainController {
         return new ModelAndView(PAGE_REGISTRATION);
     }
 
-    @RequestMapping(value = "/irontest/save", method = RequestMethod.GET)
+    @RequestMapping(value = "/irontest/save", method = RequestMethod.POST)
     public ModelAndView saveNewUser(@RequestParam String login,
                                     @RequestParam String password,
                                     @RequestParam String password2) throws DaoException {
         ModelAndView modelAndView = new ModelAndView();
         if (dao.isLoginExist(login)) {
-
-        }
-        if (password.equals(password2)) {
+            modelAndView.setViewName(PAGE_REGISTRATION);
+            modelAndView.addObject("error", "This login is already exist");
+        } else if (!password.equals(password2)) {
+            modelAndView.setViewName(PAGE_REGISTRATION);
+            modelAndView.addObject("error", "Passwords must be same");
+        } else {
             User user = new User();
             user.setLogin(login);
             Md5PasswordEncoder encoder = new Md5PasswordEncoder();
             user.setPassword(encoder.encodePassword(password, null));
             dao.saveUser(user);
             modelAndView.setViewName(PAGE_LOGIN);
-        } else {
-            modelAndView.setViewName(PAGE_REGISTRATION);
         }
         return modelAndView;
     }
 
-    @RequestMapping(value = "/irontest/403", method = RequestMethod.GET)
+    @RequestMapping(value = "/irontest/403")
     public ModelAndView accesssDenied() {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
