@@ -1,6 +1,7 @@
 package com.snitavets.irontest.dao.mssql;
 
 import com.snitavets.irontest.dao.IUserDao;
+import com.snitavets.irontest.entity.ContactMessage;
 import com.snitavets.irontest.entity.User;
 import com.snitavets.irontest.exception.DaoException;
 import org.hibernate.*;
@@ -98,5 +99,24 @@ public class HibernateMssqlUserDao implements IUserDao {
             throw new DaoException(he);
         }
         return user;
+    }
+
+    @Override
+    public boolean saveContactMessage(ContactMessage ci) throws DaoException {
+        boolean result = false;
+        Transaction transaction = null;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(ci);
+            result = true;
+            transaction.commit();
+        } catch (HibernateException he) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DaoException(he);
+        }
+        return result;
     }
 }

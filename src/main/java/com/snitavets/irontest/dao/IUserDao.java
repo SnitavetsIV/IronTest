@@ -1,5 +1,6 @@
 package com.snitavets.irontest.dao;
 
+import com.snitavets.irontest.entity.ContactMessage;
 import com.snitavets.irontest.entity.User;
 import com.snitavets.irontest.exception.DaoException;
 
@@ -34,5 +35,7 @@ public interface IUserDao {
      * @see com.snitavets.irontest.entity.User
      */
     User findUserByLogin(String login) throws DaoException;
+
+    boolean saveContactMessage(ContactMessage ci) throws DaoException;
 
 }

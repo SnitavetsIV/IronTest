@@ -184,3 +184,11 @@
 #sidebar_menu a {
     color: #D2D2D2;
 }
+
+.msg {
+    color: green;
+}
+
+.contact-msg {
+    min-height: 40px;
+}

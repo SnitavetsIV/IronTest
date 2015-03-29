@@ -10,5 +10,6 @@
         <property name="format_sql">true</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <mapping class="com.snitavets.irontest.entity.User"/>
+        <mapping class="com.snitavets.irontest.entity.ContactMessage"/>
     </session-factory>
 </hibernate-configuration>

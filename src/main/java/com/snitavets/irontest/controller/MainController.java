@@ -1,15 +1,14 @@
 package com.snitavets.irontest.controller;
 
 import com.snitavets.irontest.dao.IUserDao;
-import com.snitavets.irontest.entity.User;
+import com.snitavets.irontest.entity.ContactMessage;
+import com.snitavets.irontest.entity.UserType;
 import com.snitavets.irontest.exception.DaoException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.Iterator;
 
 import static com.snitavets.irontest.constant.Constant.*;
 
@@ -42,16 +42,55 @@ public class MainController {
         return new ModelAndView(PAGE_CONTACT);
     }
 
+    @RequestMapping(value = "/irontest/contact/save")
+    public ModelAndView contactSave(@RequestParam String name,
+                                    @RequestParam String email,
+                                    @RequestParam(required = false) String phone,
+                                    @RequestParam String message) {
+        ModelAndView modelAndView = new ModelAndView(PAGE_CONTACT);
+        try {
+            ContactMessage cm = new ContactMessage();
+            cm.setName(name);
+            cm.setEmail(email);
+            cm.setPhone(phone);
+            cm.setMessage(message);
+            dao.saveContactMessage(cm);
+            modelAndView.addObject(ATR_MSG, MSG_CONT_SUCCESS);
+        } catch (DaoException e) {
+            LOG.error(e);
+            modelAndView.addObject(ATR_ERROR, MSG_ERR_UNKNOWN);
+        }
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/irontest/about/")
     public ModelAndView about() {
         return new ModelAndView(PAGE_ABOUT);
     }
 
-    @RequestMapping(value = {"/irontest/", "/"})
-    public ModelAndView home(HttpServletRequest request) {
-        ModelAndView result = null;
-        result = new ModelAndView(PAGE_GUEST_MAIN);
-        return result;
+    @RequestMapping(value = {"/irontest/", "/", "/irontest/home"})
+    public ModelAndView home() {
+        ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetail = (UserDetails) auth.getPrincipal();
+            Collection<? extends GrantedAuthority> access = userDetail.getAuthorities();
+            Iterator<? extends GrantedAuthority> iterator = access.iterator();
+            GrantedAuthority authority = iterator.next();
+            if (UserType.USER.toString().equals(authority.getAuthority())) {
+                model.setViewName(PAGE_USER_MAIN);
+            } else if (UserType.ADMIN.toString().equals(authority.getAuthority())) {
+                model.setViewName(PAGE_ADMIN_MAIN);
+            } else if (UserType.TUTOR.toString().equals(authority.getAuthority())) {
+                model.setViewName(PAGE_TUTOR_MAIN);
+            } else {
+                model.setViewName(PAGE_GUEST_MAIN);
+            }
+            model.addObject("username", userDetail.getUsername());
+        } else {
+            model.setViewName(PAGE_GUEST_MAIN);
+        }
+        return model;
     }
 
     @RequestMapping(value = "/irontest/admin**", method = RequestMethod.GET)
@@ -74,81 +113,19 @@ public class MainController {
         return model;
     }
 
-    @RequestMapping("/irontest/login")
-    public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-                              @RequestParam(value = "logout", required = false) String logout,
-                              HttpServletRequest request) {
-
-        ModelAndView model = new ModelAndView();
-        if (error != null) {
-            model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
-        }
-
-        if (logout != null) {
-            model.addObject("msg", "You've been logged out successfully.");
-        }
-        model.setViewName(PAGE_LOGIN);
-
-        return model;
-    }
-
-    // customize the error message
-    private String getErrorMessage(HttpServletRequest request, String key) {
-
-        Exception exception = (Exception) request.getSession().getAttribute(key);
-
-        String error = "";
-        if (exception instanceof BadCredentialsException) {
-            error = "Invalid username or password!";
-        } else if (exception instanceof LockedException) {
-            error = exception.getMessage();
-        } else {
-            error = "Some problem with authentication. Please try again later!";
-        }
-        LOG.error(exception);
-
-        return error;
-    }
-
-    @RequestMapping("/irontest/registration")
-    public ModelAndView registration() {
-        return new ModelAndView(PAGE_REGISTRATION);
-    }
-
-    @RequestMapping(value = "/irontest/save", method = RequestMethod.POST)
-    public ModelAndView saveNewUser(@RequestParam String login,
-                                    @RequestParam String password,
-                                    @RequestParam String password2) throws DaoException {
-        ModelAndView modelAndView = new ModelAndView();
-        if (dao.isLoginExist(login)) {
-            modelAndView.setViewName(PAGE_REGISTRATION);
-            modelAndView.addObject("error", "This login is already exist");
-        } else if (!password.equals(password2)) {
-            modelAndView.setViewName(PAGE_REGISTRATION);
-            modelAndView.addObject("error", "Passwords must be same");
-        } else {
-            User user = new User();
-            user.setLogin(login);
-            Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-            user.setPassword(encoder.encodePassword(password, null));
-            dao.saveUser(user);
-            modelAndView.setViewName(PAGE_LOGIN);
-        }
-        return modelAndView;
-    }
 
     @RequestMapping(value = "/irontest/403")
-    public ModelAndView accesssDenied() {
-        ModelAndView model = new ModelAndView();
+    public ModelAndView accessDenied() {
+        /*ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetail = (UserDetails) auth.getPrincipal();
-            LOG.info(userDetail);
+            LOG.warn("access denied to user:" + userDetail);
             model.addObject("username", userDetail.getUsername());
         }
 
-        model.setViewName(PAGE_403);
-        return model;
+        model.setViewName(PAGE_403);*/
+        return home();
 
     }
 

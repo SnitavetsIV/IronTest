@@ -35,7 +35,12 @@
 
     <definition name="contact" extends="DefaultTemplate">
         <put-attribute name="body"
-                       value="/WEB-INF/tiles/body/contact.jsp"/>
+                       value="/WEB-INF/tiles/body/contactBody.jsp"/>
+    </definition>
+
+    <definition name="about" extends="DefaultTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/aboutBody.jsp"/>
     </definition>
 
     <definition name="error403page" extends="DefaultTemplate">

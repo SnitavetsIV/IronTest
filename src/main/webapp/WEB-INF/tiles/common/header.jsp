@@ -28,15 +28,15 @@
                       method="post">
                     <div class="form-group">
                         <input type="text" name="login" class="form-control" required="required"
-                               placeholder="<spring:message code='authorization.login.login.name'/>"
-                               pattern="<spring:message code='authorization.login.login.pattern'/>"
-                               title="<spring:message code='authorization.login.login.title'/>">
+                               placeholder="<spring:message code='auth.login.login.name'/>"
+                               pattern="<spring:message code='auth.login.login.pattern'/>"
+                               title="<spring:message code='auth.login.login.title'/>">
                     </div>
                     <div class="form-group">
                         <input type="password" name="password" class="form-control" required="required"
-                               placeholder="<spring:message code='authorization.login.password.name'/>"
-                               pattern="<spring:message code='authorization.login.password.pattern'/>"
-                               title="<spring:message code='authorization.login.password.title'/>">
+                               placeholder="<spring:message code='auth.login.password.name'/>"
+                               pattern="<spring:message code='auth.login.password.pattern'/>"
+                               title="<spring:message code='auth.login.password.title'/>">
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}"
                            value="${_csrf.token}"/>
@@ -47,7 +47,7 @@
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <c:url value="/j_spring_security_logout" var="logoutUrl"/>
-                <form action="${logoutUrl}" method="get" id="logoutForm">
+                <form action="${logoutUrl}" method="post" id="logoutForm">
                     <input type="hidden" name="${_csrf.parameterName}"
                            value="${_csrf.token}"/>
                 </form>
@@ -59,8 +59,14 @@
 
                 <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <div class="navbar-right">
-                        Hello, ${pageContext.request.userPrincipal.name}! | <a
-                            href="javascript:formSubmit()"> Logout</a>
+                        <ui class="nav navbar-nav">
+                            <li class="active">
+                                <a>
+                                    <spring:message code='header.hello'/>, ${pageContext.request.userPrincipal.name}
+                                </a>
+                            </li>
+                            <li><a href="javascript:formSubmit()"><spring:message code='header.logout'/></a></li>
+                        </ui>
                     </div>
                 </c:if>
             </sec:authorize>
