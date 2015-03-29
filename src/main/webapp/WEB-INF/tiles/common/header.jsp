@@ -19,9 +19,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#"><spring:message code='header.home'/></a></li>
-                <li><a href="#about"><spring:message code='header.about'/></a></li>
-                <li><a href="#contact"><spring:message code='header.contact'/></a></li>
+                <li class="active"><a href="/irontest/"><spring:message code='header.home'/></a></li>
+                <li><a href="/irontest/about/"><spring:message code='header.about'/></a></li>
+                <li><a href="/irontest/contact/"><spring:message code='header.contact'/></a></li>
             </ul>
             <sec:authorize access="isAnonymous()">
                 <form class="navbar-form navbar-right" action="<c:url value='/j_spring_security_check' />"

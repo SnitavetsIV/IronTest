@@ -37,29 +37,20 @@ public class MainController {
         dao = _dao;
     }
 
+    @RequestMapping(value = "/irontest/contact/")
+    public ModelAndView contact() {
+        return new ModelAndView(PAGE_CONTACT);
+    }
+
+    @RequestMapping(value = "/irontest/about/")
+    public ModelAndView about() {
+        return new ModelAndView(PAGE_ABOUT);
+    }
+
     @RequestMapping(value = {"/irontest/", "/"})
     public ModelAndView home(HttpServletRequest request) {
         ModelAndView result = null;
-        /*HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(ATR_USER);
-        if (user != null) {
-            switch (user.getType()) {
-                case USER:
-                    result = new ModelAndView(PAGE_USER_MAIN);
-                    break;
-                case ADMIN:
-                    result = new ModelAndView(PAGE_ADMIN_MAIN);
-                    break;
-                case TUTOR:
-                    result = new ModelAndView(PAGE_TUTOR_MAIN);
-                    break;
-                default:
-                    session.removeAttribute(ATR_USER);
-                    result = new ModelAndView(PAGE_GUEST_MAIN);
-            }
-        } else {*/
         result = new ModelAndView(PAGE_GUEST_MAIN);
-       /*}*/
         return result;
     }
 
