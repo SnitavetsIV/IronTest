@@ -45,7 +45,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <button type="submit" class="btn btn-success"><spring:message
-                            code='auth.login.button.singin'/></button>
+                            code='auth.login.button.signin'/></button>
                     <button type="button" onclick="window.location='/irontest/registration'" class="btn btn-success">
                         <spring:message code='auth.login.button.registration'/>
                     </button>

@@ -40,7 +40,7 @@
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}"
                            value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-success"><spring:message code='header.singin'/></button>
+                    <button type="submit" class="btn btn-success"><spring:message code='header.signin'/></button>
                     <a class="btn btn-success" href="/irontest/registration"><spring:message
                             code='header.registration'/></a>
                 </form>

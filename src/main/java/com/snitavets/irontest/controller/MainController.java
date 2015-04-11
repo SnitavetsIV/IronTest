@@ -95,38 +95,51 @@ public class MainController {
 
     @RequestMapping(value = "/irontest/admin**", method = RequestMethod.GET)
     public ModelAndView adminPage() {
-
         ModelAndView model = new ModelAndView();
-
         model.setViewName(PAGE_ADMIN_MAIN);
-
         return model;
     }
 
     @RequestMapping(value = "/irontest/welcome**", method = RequestMethod.GET)
-    public ModelAndView userPage() {
-
+    public ModelAndView welcomePage() {
         ModelAndView model = new ModelAndView();
-
-        model.setViewName(PAGE_USER_MAIN);
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            model.setViewName("redirect:/irontest/");
+        } else {
+            for (GrantedAuthority authority : auth.getAuthorities()) {
+                switch (UserType.valueOf(authority.getAuthority())) {
+                    case USER:
+                        model.setViewName("redirect:/irontest/user/main");
+                        break;
+                    case ADMIN:
+                        model.setViewName("redirect:/irontest/admin/main");
+                        break;
+                    default:
+                }
+            }
+        }
         return model;
     }
 
 
     @RequestMapping(value = "/irontest/403")
     public ModelAndView accessDenied() {
-        /*ModelAndView model = new ModelAndView();
+        ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetail = (UserDetails) auth.getPrincipal();
             LOG.warn("access denied to user:" + userDetail);
             model.addObject("username", userDetail.getUsername());
         }
-
-        model.setViewName(PAGE_403);*/
+        model.setViewName(PAGE_403);
         return home();
+    }
 
+    @RequestMapping("/irontest/tests")
+    public ModelAndView tests() {
+        ModelAndView model = new ModelAndView();
+        return model;
     }
 
 }

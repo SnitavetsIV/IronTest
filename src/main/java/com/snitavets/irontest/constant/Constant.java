@@ -14,6 +14,8 @@ public final class Constant {
     public static final String PAGE_403 = "error403page";
     public static final String PAGE_CONTACT = "contact";
     public static final String PAGE_ABOUT = "about";
+    public static final String PAGE_USER_PERSONAL = "userPersonal";
+
 
     public static final String ATR_USER = "user";
     public static final String ATR_ERROR = "error";

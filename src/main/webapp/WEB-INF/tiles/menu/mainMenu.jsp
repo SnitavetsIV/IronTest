@@ -3,7 +3,8 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <!DOCTYPE html>
 <ul class="sidebar-nav" id="sidebar">
-    <li><a>link2<span class="sub_icon glyphicon glyphicon-link"></span></a></li>
-    <li class="sidebar-nav">Items</li>
-    <li><a>link2<span class="sub_icon glyphicon glyphicon-link"></span></a></li>
+    <li><a href="#">Tests<span class="sub_icon glyphicon glyphicon-link"></span></a></li>
+    <li><a href="#">Forum<span class="sub_icon glyphicon glyphicon-link"></span></a></li>
 </ul>
+
+<!-- <li class="sidebar-nav">Items</li> -->
