@@ -2,13 +2,12 @@ package com.snitavets.irontest.controller;
 
 import com.snitavets.irontest.dao.IUserDao;
 import com.snitavets.irontest.entity.ContactMessage;
-import com.snitavets.irontest.entity.UserType;
 import com.snitavets.irontest.exception.DaoException;
+import com.snitavets.irontest.util.UtilController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -16,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 import static com.snitavets.irontest.constant.Constant.*;
 
@@ -39,7 +35,15 @@ public class MainController {
 
     @RequestMapping(value = "/irontest/contact/")
     public ModelAndView contact() {
-        return new ModelAndView(PAGE_CONTACT);
+        ModelAndView model = new ModelAndView();
+        switch (UtilController.getContextUserType()) {
+            case USER:
+                model.setViewName(PAGE_USER_CONTACT);
+                break;
+            default:
+                model.setViewName(PAGE_CONTACT);
+        }
+        return model;
     }
 
     @RequestMapping(value = "/irontest/contact/save")
@@ -65,30 +69,30 @@ public class MainController {
 
     @RequestMapping(value = "/irontest/about/")
     public ModelAndView about() {
-        return new ModelAndView(PAGE_ABOUT);
+        ModelAndView model = new ModelAndView();
+        switch (UtilController.getContextUserType()) {
+            case USER:
+                model.setViewName(PAGE_USER_ABOUT);
+                break;
+            default:
+                model.setViewName(PAGE_ABOUT);
+        }
+        return model;
     }
 
     @RequestMapping(value = {"/irontest/", "/", "/irontest/home"})
     public ModelAndView home() {
         ModelAndView model = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetail = (UserDetails) auth.getPrincipal();
-            Collection<? extends GrantedAuthority> access = userDetail.getAuthorities();
-            Iterator<? extends GrantedAuthority> iterator = access.iterator();
-            GrantedAuthority authority = iterator.next();
-            if (UserType.USER.toString().equals(authority.getAuthority())) {
+        switch (UtilController.getContextUserType()) {
+            case USER:
                 model.setViewName(PAGE_USER_MAIN);
-            } else if (UserType.ADMIN.toString().equals(authority.getAuthority())) {
+                break;
+            case ADMIN:
                 model.setViewName(PAGE_ADMIN_MAIN);
-            } else if (UserType.TUTOR.toString().equals(authority.getAuthority())) {
-                model.setViewName(PAGE_TUTOR_MAIN);
-            } else {
+                break;
+            case TUTOR:
+            default:
                 model.setViewName(PAGE_GUEST_MAIN);
-            }
-            model.addObject("username", userDetail.getUsername());
-        } else {
-            model.setViewName(PAGE_GUEST_MAIN);
         }
         return model;
     }
@@ -97,28 +101,6 @@ public class MainController {
     public ModelAndView adminPage() {
         ModelAndView model = new ModelAndView();
         model.setViewName(PAGE_ADMIN_MAIN);
-        return model;
-    }
-
-    @RequestMapping(value = "/irontest/welcome**", method = RequestMethod.GET)
-    public ModelAndView welcomePage() {
-        ModelAndView model = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth instanceof AnonymousAuthenticationToken) {
-            model.setViewName("redirect:/irontest/");
-        } else {
-            for (GrantedAuthority authority : auth.getAuthorities()) {
-                switch (UserType.valueOf(authority.getAuthority())) {
-                    case USER:
-                        model.setViewName("redirect:/irontest/user/main");
-                        break;
-                    case ADMIN:
-                        model.setViewName("redirect:/irontest/admin/main");
-                        break;
-                    default:
-                }
-            }
-        }
         return model;
     }
 
@@ -138,7 +120,7 @@ public class MainController {
 
     @RequestMapping("/irontest/tests")
     public ModelAndView tests() {
-        ModelAndView model = new ModelAndView();
+        ModelAndView model = new ModelAndView(PAGE_LIST_TEST);
         return model;
     }
 

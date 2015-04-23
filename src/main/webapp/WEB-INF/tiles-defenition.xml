@@ -4,7 +4,7 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-    <definition name="DefaultTemplate"
+    <definition name="guestTemplate"
                 template="/WEB-INF/layouts/mainLayout.jsp">
         <put-attribute name="titleBundle" value="default.title"/>
         <put-attribute name="header" value="/WEB-INF/tiles/common/header.jsp"/>
@@ -13,12 +13,12 @@
         <put-attribute name="footer" value="/WEB-INF/tiles/common/footer.jsp"/>
     </definition>
 
-    <definition name="userTemplate" extends="DefaultTemplate"
+    <definition name="userTemplate" extends="guestTemplate"
                 template="/WEB-INF/layouts/mainLayout.jsp">
         <put-attribute name="menu" value="/WEB-INF/tiles/menu/userMenu.jsp"/>
     </definition>
 
-    <definition name="guestMainPage" extends="DefaultTemplate">
+    <definition name="guestMainPage" extends="guestTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/guest.jsp"/>
     </definition>
@@ -28,34 +28,54 @@
                        value="/WEB-INF/tiles/body/user/user.jsp"/>
     </definition>
 
-    <definition name="loginPage" extends="DefaultTemplate">
+    <definition name="loginPage" extends="guestTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/authorization/login.jsp"/>
     </definition>
 
-    <definition name="registrationPage" extends="DefaultTemplate">
+    <definition name="registrationPage" extends="guestTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/authorization/registration.jsp"/>
     </definition>
 
-    <definition name="contact" extends="DefaultTemplate">
+    <definition name="contact" extends="guestTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/contact.jsp"/>
     </definition>
 
-    <definition name="about" extends="DefaultTemplate">
+    <definition name="about" extends="guestTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/about.jsp"/>
     </definition>
 
-    <definition name="error403page" extends="DefaultTemplate">
+    <definition name="error403page" extends="guestTemplate">
         <put-attribute name="body"
                        value="/WEB-INF/tiles/body/error403.jsp"/>
     </definition>
 
-    <definition name="userPersonal" extends="userTemplate">
+    <definition name="userProfile" extends="userTemplate">
         <put-attribute name="body"
-                       value="/WEB-INF/tiles/body/user/personal.jsp"/>
+                       value="/WEB-INF/tiles/body/user/profile.jsp"/>
+    </definition>
+
+    <definition name="userProfileEdit" extends="userTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/user/profileEdit.jsp"/>
+    </definition>
+
+    <definition name="userAbout" extends="userTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/contact.jsp"/>
+    </definition>
+
+    <definition name="userContact" extends="userTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/contact.jsp"/>
+    </definition>
+
+    <definition name="listTest" extends="guestTemplate">
+        <put-attribute name="body"
+                       value="/WEB-INF/tiles/body/test/listTest.jsp"/>
     </definition>
 
 </tiles-definitions>
